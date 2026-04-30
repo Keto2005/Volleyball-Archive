@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VolleyPedia — The Volleyball Digital Encyclopedia</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a0f2e;
+    --navy2: #111740;
+    --gold: #f0c040;
+    --gold2: #e8a800;
+    --white: #f8f6f0;
+    --gray: #b0aaa0;
+    --light: #f0ede5;
+    --accent: #e84040;
+    --card-bg: #161c3e;
+    --border: rgba(240,192,64,0.18);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,15,46,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem; height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem; letter-spacing: 2px;
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--gray); text-decoration: none;
+    font-size: 0.9rem; font-weight: 500; letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold); color: var(--navy);
+    border: none; padding: 8px 20px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.85rem;
+    cursor: pointer; letter-spacing: 0.5px;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold2); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 26px; height: 2px; background: var(--white); border-radius: 2px; transition: 0.3s; }
+  #mobile-menu {
+    display: none; flex-direction: column; gap: 1rem;
+    position: fixed; top: 64px; left: 0; right: 0;
+    background: var(--navy2); padding: 1.5rem 2.5rem;
+    border-bottom: 1px solid var(--border); z-index: 99;
+  }
+  #mobile-menu a { color: var(--gray); text-decoration: none; font-weight: 500; }
+
+  /* ===== HERO ===== */
+  #home {
+    min-height: 100vh; padding-top: 64px;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, #0a0f2e 0%, #1a0f40 50%, #0a1a3e 100%);
+  }
+  .hero-pattern {
+    position: absolute; inset: 0; z-index: 1; opacity: 0.06;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(240,192,64,0.8) 40px, rgba(240,192,64,0.8) 41px),
+      repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(240,192,64,0.8) 40px, rgba(240,192,64,0.8) 41px);
+  }
+  .hero-content {
+    position: relative; z-index: 3;
+    max-width: 1200px; margin: 0 auto; padding: 4rem 2.5rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(240,192,64,0.15); border: 1px solid rgba(240,192,64,0.4);
+    color: var(--gold); font-size: 0.78rem; font-weight: 600; letter-spacing: 2px;
+    padding: 6px 16px; margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    line-height: 0.95; letter-spacing: 1px;
+    color: var(--white); margin-bottom: 1.5rem;
+  }
+  .hero-title em { color: var(--gold); font-style: normal; }
+  .hero-sub {
+    color: var(--gray); font-size: 1.05rem; font-weight: 300;
+    max-width: 440px; margin-bottom: 2.5rem;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--navy);
+    padding: 14px 32px; font-weight: 700; font-size: 0.95rem;
+    border: none; cursor: pointer; letter-spacing: 0.5px;
+    text-decoration: none; transition: background 0.2s, transform 0.1s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold2); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent; color: var(--white);
+    padding: 14px 32px; font-weight: 500; font-size: 0.95rem;
+    border: 1px solid rgba(255,255,255,0.3); cursor: pointer;
+    text-decoration: none; transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3rem; padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: var(--gold); line-height: 1;
+  }
+  .stat-label { font-size: 0.78rem; color: var(--gray); letter-spacing: 1px; margin-top: 4px; }
+
+  /* Hero image area */
+  .hero-visual {
+    position: relative; display: flex; align-items: center; justify-content: center;
+  }
+  .hero-img-wrap {
+    position: relative; width: 100%; max-width: 500px;
+  }
+  .hero-img-wrap img {
+    width: 100%; border-radius: 2px;
+    box-shadow: 0 0 60px rgba(240,192,64,0.15);
+  }
+  .hero-img-overlay {
+    position: absolute; bottom: -1rem; left: -1.5rem;
+    background: var(--gold); color: var(--navy);
+    padding: 1rem 1.5rem; font-weight: 700;
+  }
+  .hero-img-overlay .big { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; line-height: 1; }
+  .hero-img-overlay .small { font-size: 0.75rem; letter-spacing: 1px; opacity: 0.7; }
+
+  /* ===== VIDEO SECTION ===== */
+  #video-section {
+    background: #070b20;
+    padding: 5rem 2.5rem;
+  }
+  .section-label {
+    font-size: 0.75rem; letter-spacing: 3px; font-weight: 600;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    line-height: 1; color: var(--white); margin-bottom: 1rem;
+  }
+  .section-title em { color: var(--gold); font-style: normal; }
+  .section-sub { color: var(--gray); font-weight: 300; max-width: 600px; }
+  .section-header { max-width: 1200px; margin: 0 auto 3rem; }
+  .video-grid {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem;
+  }
+  .video-main iframe, .video-main video {
+    width: 100%; aspect-ratio: 16/9; border: none;
+    display: block;
+  }
+  .video-thumb-list { display: flex; flex-direction: column; gap: 1rem; }
+  .video-thumb {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1rem; display: flex; gap: 1rem; align-items: center;
+    cursor: pointer; transition: border-color 0.2s;
+  }
+  .video-thumb:hover { border-color: var(--gold); }
+  .vt-icon {
+    width: 48px; height: 48px; min-width: 48px;
+    background: var(--gold); display: flex; align-items: center; justify-content: center;
+    color: var(--navy); font-size: 1.2rem; font-weight: 700;
+  }
+  .vt-title { font-weight: 500; font-size: 0.9rem; margin-bottom: 2px; }
+  .vt-sub { font-size: 0.78rem; color: var(--gray); }
+
+  /* ===== POSITIONS SECTION ===== */
+  #positions {
+    padding: 5rem 2.5rem;
+    background: var(--navy);
+  }
+  .positions-grid {
+    max-width: 1200px; margin: 3rem auto 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;
+  }
+  .pos-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1.8rem 1.5rem;
+    transition: border-color 0.25s, transform 0.2s;
+    cursor: pointer; position: relative; overflow: hidden;
+  }
+  .pos-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .pos-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+  .pos-card:hover::before { transform: scaleX(1); }
+  .pos-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .pos-name {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+    color: var(--gold); letter-spacing: 1px; margin-bottom: 0.5rem;
+  }
+  .pos-desc { font-size: 0.85rem; color: var(--gray); line-height: 1.6; }
+
+  /* ===== RULES SECTION ===== */
+  #rules {
+    background: #070b20;
+    padding: 5rem 2.5rem;
+  }
+  .rules-wrap {
+    max-width: 1200px; margin: 3rem auto 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+  }
+  .rule-accordion { display: flex; flex-direction: column; gap: 0.75rem; }
+  .accordion-item {
+    background: var(--card-bg); border: 1px solid var(--border); overflow: hidden;
+  }
+  .accordion-btn {
+    width: 100%; padding: 1.1rem 1.4rem;
+    background: none; border: none; color: var(--white);
+    text-align: left; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    transition: color 0.2s;
+  }
+  .accordion-btn:hover { color: var(--gold); }
+  .accordion-btn .chevron { font-size: 1.2rem; transition: transform 0.3s; color: var(--gold); }
+  .accordion-btn.open .chevron { transform: rotate(180deg); }
+  .accordion-body {
+    max-height: 0; overflow: hidden;
+    padding: 0 1.4rem;
+    color: var(--gray); font-size: 0.88rem; line-height: 1.8;
+    transition: max-height 0.35s ease, padding 0.3s;
+  }
+  .accordion-body.open { max-height: 300px; padding: 0 1.4rem 1.1rem; }
+  .court-diagram {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 2rem; display: flex; flex-direction: column; align-items: center;
+    gap: 1.5rem;
+  }
+  .court-diagram h3 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
+    color: var(--gold); letter-spacing: 1px;
+  }
+  .court-svg { width: 100%; max-width: 320px; }
+
+  /* ===== HISTORY ===== */
+  #history {
+    padding: 5rem 2.5rem;
+    background: var(--navy);
+  }
+  .timeline {
+    max-width: 900px; margin: 3rem auto 0;
+    position: relative;
+  }
+  .timeline::before {
+    content: ''; position: absolute;
+    left: 80px; top: 0; bottom: 0; width: 2px;
+    background: linear-gradient(to bottom, var(--gold), rgba(240,192,64,0.1));
+  }
+  .tl-item {
+    display: flex; gap: 2rem; margin-bottom: 2.5rem; align-items: flex-start;
+    animation: fadeIn 0.5s ease both;
+  }
+  .tl-year {
+    min-width: 60px; text-align: right;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--gold);
+    line-height: 1.3;
+  }
+  .tl-dot {
+    min-width: 16px; height: 16px; background: var(--gold);
+    border-radius: 50%; margin-top: 6px; position: relative; z-index: 1;
+    flex-shrink: 0;
+  }
+  .tl-content h4 { font-weight: 600; font-size: 1rem; margin-bottom: 0.3rem; }
+  .tl-content p { font-size: 0.88rem; color: var(--gray); line-height: 1.7; }
+
+  /* ===== GLOSSARY ===== */
+  #glossary {
+    background: #070b20;
+    padding: 5rem 2.5rem;
+  }
+  .glossary-search-wrap {
+    max-width: 500px; margin: 2rem auto; position: relative;
+  }
+  .glossary-search {
+    width: 100%; padding: 14px 1.5rem;
+    background: var(--card-bg); border: 1px solid var(--border);
+    color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .glossary-search::placeholder { color: var(--gray); }
+  .glossary-search:focus { border-color: var(--gold); }
+  .glossary-letters {
+    max-width: 1200px; margin: 0 auto 2rem;
+    display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;
+  }
+  .letter-btn {
+    width: 36px; height: 36px; background: var(--card-bg);
+    border: 1px solid var(--border); color: var(--gray);
+    font-family: 'Bebas Neue', sans-serif; font-size: 1rem; cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .letter-btn:hover, .letter-btn.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+  .glossary-grid {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;
+  }
+  .gloss-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1.2rem 1.4rem; transition: border-color 0.2s;
+  }
+  .gloss-card:hover { border-color: rgba(240,192,64,0.5); }
+  .gloss-term { font-weight: 600; color: var(--gold); font-size: 0.95rem; margin-bottom: 0.4rem; }
+  .gloss-def { font-size: 0.85rem; color: var(--gray); line-height: 1.65; }
+  .no-results { color: var(--gray); text-align: center; padding: 2rem; grid-column: 1/-1; }
+
+  /* ===== QUIZ ===== */
+  #quiz {
+    padding: 5rem 2.5rem;
+    background: var(--navy);
+  }
+  .quiz-wrap {
+    max-width: 700px; margin: 3rem auto 0;
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 2.5rem;
+  }
+  .quiz-progress-bar {
+    height: 4px; background: rgba(255,255,255,0.1);
+    margin-bottom: 2rem; border-radius: 2px; overflow: hidden;
+  }
+  .quiz-progress-fill {
+    height: 100%; background: var(--gold);
+    transition: width 0.4s ease; border-radius: 2px;
+  }
+  .quiz-q-num { font-size: 0.78rem; color: var(--gray); letter-spacing: 2px; margin-bottom: 0.75rem; }
+  .quiz-question { font-size: 1.2rem; font-weight: 500; margin-bottom: 2rem; line-height: 1.5; }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.75rem; }
+  .quiz-opt {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--white); padding: 1rem 1.3rem;
+    text-align: left; font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+    cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    width: 100%;
+  }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--gold); background: rgba(240,192,64,0.06); }
+  .quiz-opt.correct { border-color: #4caf82; background: rgba(76,175,130,0.12); color: #4caf82; }
+  .quiz-opt.wrong { border-color: var(--accent); background: rgba(232,64,64,0.1); color: #e07070; }
+  .quiz-feedback {
+    margin-top: 1.5rem; padding: 1rem 1.2rem;
+    font-size: 0.9rem; display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(76,175,130,0.1); border: 1px solid rgba(76,175,130,0.3); color: #4caf82; }
+  .quiz-feedback.wrong { background: rgba(232,64,64,0.1); border: 1px solid rgba(232,64,64,0.3); color: #e07070; }
+  .quiz-next {
+    margin-top: 1.5rem; background: var(--gold); color: var(--navy);
+    border: none; padding: 12px 28px; font-family: 'DM Sans', sans-serif;
+    font-weight: 700; font-size: 0.95rem; cursor: pointer;
+    display: none; transition: background 0.2s;
+  }
+  .quiz-next.show { display: inline-block; }
+  .quiz-next:hover { background: var(--gold2); }
+  .quiz-result {
+    text-align: center; display: none; padding: 1rem 0;
+  }
+  .quiz-result.show { display: block; }
+  .score-big {
+    font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: var(--gold); line-height: 1;
+  }
+
+  /* ===== ABOUT ===== */
+  #about {
+    background: linear-gradient(135deg, #0d1335 0%, #1a0f40 100%);
+    padding: 5rem 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .about-wrap {
+    max-width: 1200px; margin: 3rem auto 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+  .about-img {
+    position: relative;
+  }
+  .about-img img { width: 100%; display: block; }
+  .about-img-badge {
+    position: absolute; bottom: -1rem; right: -1rem;
+    background: var(--gold); color: var(--navy); padding: 1.2rem;
+    text-align: center;
+  }
+  .about-img-badge .num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; line-height: 1; display: block;
+  }
+  .about-img-badge .txt { font-size: 0.7rem; font-weight: 600; letter-spacing: 1px; }
+  .about-text h2 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--white);
+    line-height: 1; margin-bottom: 1.2rem;
+  }
+  .about-text h2 span { color: var(--gold); }
+  .about-text p { color: var(--gray); font-weight: 300; margin-bottom: 1.2rem; }
+  .about-team { margin-top: 2.5rem; }
+  .about-team h3 {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+    color: var(--gold); letter-spacing: 1px; margin-bottom: 1.2rem;
+  }
+  .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .team-member {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    padding: 1rem; display: flex; gap: 0.75rem; align-items: center;
+  }
+  .team-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--gold); display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem; color: var(--navy); flex-shrink: 0;
+  }
+  .team-name { font-weight: 500; font-size: 0.9rem; }
+  .team-role { font-size: 0.75rem; color: var(--gray); }
+
+  /* ===== CONTACT ===== */
+  #contact {
+    padding: 5rem 2.5rem;
+    background: #070b20;
+  }
+  .contact-wrap {
+    max-width: 1200px; margin: 3rem auto 0;
+    display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem;
+  }
+  .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+  .contact-info-item { display: flex; gap: 1.2rem; align-items: flex-start; }
+  .ci-icon {
+    width: 44px; height: 44px; background: rgba(240,192,64,0.12);
+    border: 1px solid rgba(240,192,64,0.3); display: flex; align-items: center;
+    justify-content: center; font-size: 1.1rem; flex-shrink: 0; color: var(--gold);
+  }
+  .ci-label { font-size: 0.75rem; color: var(--gray); letter-spacing: 1px; margin-bottom: 2px; }
+  .ci-value { font-size: 0.95rem; }
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-field label { font-size: 0.78rem; letter-spacing: 1px; color: var(--gray); }
+  .form-field input, .form-field textarea, .form-field select {
+    background: var(--card-bg); border: 1px solid var(--border);
+    color: var(--white); padding: 12px 1rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    outline: none; transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .form-field input:focus, .form-field textarea:focus, .form-field select:focus { border-color: var(--gold); }
+  .form-field select { appearance: none; }
+  .form-field textarea { min-height: 110px; }
+  .form-msg {
+    margin-top: 0.5rem; padding: 0.75rem 1rem;
+    font-size: 0.85rem; display: none;
+  }
+  .form-msg.success { background: rgba(76,175,130,0.1); border: 1px solid rgba(76,175,130,0.3); color: #4caf82; display: block; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #040713; border-top: 1px solid var(--border);
+    padding: 3rem 2.5rem 1.5rem;
+  }
+  .footer-grid {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  .footer-brand .logo {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--gold);
+    letter-spacing: 2px; margin-bottom: 1rem; display: block;
+  }
+  .footer-brand p { color: var(--gray); font-size: 0.85rem; line-height: 1.7; }
+  .footer-col h4 {
+    font-size: 0.75rem; letter-spacing: 2px; color: var(--gold);
+    margin-bottom: 1.2rem; font-weight: 600;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .footer-col a { color: var(--gray); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom {
+    max-width: 1200px; margin: 0 auto;
+    padding-top: 1.5rem; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.8rem; color: var(--gray);
+  }
+
+  /* ===== SCROLL TOP ===== */
+  .scroll-top {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 99;
+    width: 44px; height: 44px; background: var(--gold);
+    border: none; cursor: pointer; color: var(--navy);
+    font-size: 1.2rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.2s;
+  }
+  .scroll-top.visible { opacity: 1; pointer-events: all; }
+  .scroll-top:hover { transform: translateY(-3px); }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .hero-content, .about-wrap, .rules-wrap { grid-template-columns: 1fr; gap: 2rem; }
+    .hero-visual { display: none; }
+    .video-grid { grid-template-columns: 1fr; }
+    .contact-wrap { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .about-img-badge { right: 0; }
+    .form-row { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 540px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 1.5rem; }
+    .timeline::before { left: 50px; }
+    .tl-year { min-width: 40px; font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">Volley<span>Pedia</span></a>
+  <ul class="nav-links">
+    <li><a href="#video-section">Videos</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#positions">Positions</a></li>
+    <li><a href="#rules">Rules</a></li>
+    <li><a href="#history">History</a></li>
+    <li><a href="#glossary">Glossary</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">Take Quiz</button>
+  <div class="hamburger" onclick="toggleMenu()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div id="mobile-menu">
+  <a href="#video-section" onclick="toggleMenu()">Videos</a>
+  <a href="#positions" onclick="toggleMenu()">Positions</a>
+  <a href="#rules" onclick="toggleMenu()">Rules</a>
+  <a href="#history" onclick="toggleMenu()">History</a>
+  <a href="#glossary" onclick="toggleMenu()">Glossary</a>
+  <a href="#quiz" onclick="toggleMenu()">Quiz</a>
+  <a href="#about" onclick="toggleMenu()">About</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-badge">THE ULTIMATE VOLLEYBALL RESOURCE</div>
+      <h1 class="hero-title">Master the <em>Art</em> of Volleyball</h1>
+      <p class="hero-sub">Your complete digital encyclopedia for volleyball — from beginner basics to elite tactics, history, rules, positions, and more.</p>
+      <div class="hero-btns">
+        <a href="#positions" class="btn-primary">Explore Positions</a>
+        <a href="#quiz" class="btn-outline">Test Your Knowledge</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">200+</div>
+          <div class="stat-label">TERMS COVERED</div>
+        </div>
+        <div>
+          <div class="stat-num">6</div>
+          <div class="stat-label">PLAYER POSITIONS</div>
+        </div>
+        <div>
+          <div class="stat-num">1895</div>
+          <div class="stat-label">YEAR FOUNDED</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img-wrap">
+        <img src="https://images.unsplash.com/photo-1592656094267-764a45160876?w=700&q=80" alt="Volleyball spike action" onerror="this.src='https://images.unsplash.com/photo-1547347298-4074fc3086f0?w=700&q=80'">
+        <div class="hero-img-overlay">
+          <div class="big">SPIKE IT</div>
+          <div class="small">THE ENCYCLOPEDIA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO SECTION -->
+<section id="video-section">
+  <div class="section-header fade-in">
+    <div class="section-label">▶ FEATURED CONTENT</div>
+    <h2 class="section-title">Watch &amp; <em>Learn</em></h2>
+    <p class="section-sub">Real matches &amp; highlights from Volleyball World (official FIVB channel) — click any thumbnail to switch.</p>
+  </div>
+  <div class="video-grid fade-in">
+    <div class="video-main">
+      <iframe
+        id="main-video"
+        src="https://www.youtube.com/embed/ABbhoCQORKQ"
+        title="Japan vs France VNL 2024 Gold Match"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="video-thumb-list">
+      <div class="video-thumb" style="border-color:var(--gold)" onclick="changeVideo('ABbhoCQORKQ', this)">
+        <div class="vt-icon">▶</div>
+        <div>
+          <div class="vt-title">🇯🇵 Japan vs 🇫🇷 France — VNL 2024 Gold</div>
+          <div class="vt-sub">Men's Volleyball Nations League Final highlights</div>
+        </div>
+      </div>
+      <div class="video-thumb" onclick="changeVideo('1IYsqC6xpbQ', this)">
+        <div class="vt-icon">▶</div>
+        <div>
+          <div class="vt-title">🇧🇷 Brazil vs 🇮🇹 Italy — VNL 2024 Women's</div>
+          <div class="vt-sub">Gabi vs Egonu — epic star rivalry</div>
+        </div>
+      </div>
+      <div class="video-thumb" onclick="changeVideo('pbyp6ir6GGI', this)">
+        <div class="vt-icon">▶</div>
+        <div>
+          <div class="vt-title">🇮🇹 Italy vs 🇺🇸 USA — VNL 2024 QF</div>
+          <div class="vt-sub">Women's Quarter Finals full match</div>
+        </div>
+      </div>
+      <div class="video-thumb" onclick="changeVideo('PEqso45eK5Q', this)">
+        <div class="vt-icon">▶</div>
+        <div>
+          <div class="vt-title">Club World Champs 2024 Final</div>
+          <div class="vt-sub">Sada Cruzeiro vs Trentino Itas highlights</div>
+        </div>
+      </div>
+      <div class="video-thumb" onclick="changeVideo('7TOoSX_YE0U', this)">
+        <div class="vt-icon">▶</div>
+        <div>
+          <div class="vt-title">Top 25 Best Volleyball Actions</div>
+          <div class="vt-sub">The most incredible plays ever compiled</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO GALLERY -->
+<section id="gallery" style="background:var(--navy2);padding:5rem 2.5rem;">
+  <div class="section-header fade-in">
+    <div class="section-label">📸 PHOTO GALLERY</div>
+    <h2 class="section-title">Volleyball in <em>Action</em></h2>
+    <p class="section-sub">Real photography showcasing the beauty, intensity, and athleticism of volleyball.</p>
+  </div>
+  <div class="fade-in" style="max-width:1200px;margin:3rem auto 0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:1rem;">
+    <div style="grid-column:1/3;overflow:hidden;position:relative;">
+      <img src="https://images.unsplash.com/photo-1592656094267-764a45160876?w=900&q=85" alt="Volleyball spike action"
+        style="width:100%;height:300px;object-fit:cover;display:block;transition:transform 0.4s;"
+        onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"
+        onerror="this.src='https://images.unsplash.com/photo-1547347298-4074fc3086f0?w=900&q=85'">
+      <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.75));padding:1.4rem 1.2rem;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--gold);letter-spacing:1px;">The Spike</div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.75);">The most powerful attack in volleyball</div>
+      </div>
+    </div>
+    <div style="grid-column:3/4;grid-row:1/3;overflow:hidden;position:relative;">
+      <img src="https://images.unsplash.com/photo-1547347298-4074fc3086f0?w=500&q=85" alt="Volleyball team athletes"
+        style="width:100%;height:100%;min-height:300px;object-fit:cover;display:block;transition:transform 0.4s;"
+        onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"
+        onerror="this.src='https://images.unsplash.com/photo-1544911845-a4767965dd79?w=500&q=85'">
+      <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.75));padding:1.2rem 1rem;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold);letter-spacing:1px;">Team Spirit</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);">6 players. One goal.</div>
+      </div>
+    </div>
+    <div style="overflow:hidden;position:relative;">
+      <img src="https://images.unsplash.com/photo-1574271143515-5cddf8da19be?w=500&q=85" alt="Beach volleyball"
+        style="width:100%;height:220px;object-fit:cover;display:block;transition:transform 0.4s;"
+        onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"
+        onerror="this.src='https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=500&q=85'">
+      <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.75));padding:1rem;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gold);letter-spacing:1px;">Beach Volleyball</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);">Sun, sand &amp; competition</div>
+      </div>
+    </div>
+    <div style="overflow:hidden;position:relative;">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=85" alt="Volleyball block at net"
+        style="width:100%;height:220px;object-fit:cover;display:block;transition:transform 0.4s;"
+        onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"
+        onerror="this.src='https://images.unsplash.com/photo-1544911845-a4767965dd79?w=500&q=85'">
+      <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.75));padding:1rem;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gold);letter-spacing:1px;">The Block</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);">Defense wins championships</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POSITIONS -->
+<section id="positions">
+  <div class="section-header fade-in" style="max-width:1200px;margin:0 auto 0;">
+    <div class="section-label">⬡ PLAYER ROLES</div>
+    <h2 class="section-title">The Six <em>Positions</em></h2>
+    <p class="section-sub">Every player on the court has a defined role. Learn what makes each position unique.</p>
+  </div>
+  <div class="positions-grid">
+    <div class="pos-card fade-in" onclick="sendInfo('setter')">
+      <div class="pos-icon">🏐</div>
+      <div class="pos-name">Setter</div>
+      <div class="pos-desc">The quarterback of volleyball. Sets the ball for attackers, controls offense, and reads the defense on every play.</div>
+    </div>
+    <div class="pos-card fade-in" onclick="sendInfo('outside-hitter')">
+      <div class="pos-icon">💥</div>
+      <div class="pos-name">Outside Hitter</div>
+      <div class="pos-desc">Left-side attackers who handle the most sets. Strong, well-rounded players who can hit, pass, and serve aggressively.</div>
+    </div>
+    <div class="pos-card fade-in" onclick="sendInfo('opposite')">
+      <div class="pos-icon">⚡</div>
+      <div class="pos-name">Opposite</div>
+      <div class="pos-desc">Right-side hitter who attacks from the back row and often serves as the team's top scorer and blocker.</div>
+    </div>
+    <div class="pos-card fade-in" onclick="sendInfo('middle-blocker')">
+      <div class="pos-icon">🛡️</div>
+      <div class="pos-name">Middle Blocker</div>
+      <div class="pos-desc">The wall at the net. Quick blockers who shut down the opponent's attack and run fast middle offense.</div>
+    </div>
+    <div class="pos-card fade-in" onclick="sendInfo('libero')">
+      <div class="pos-icon">🐾</div>
+      <div class="pos-name">Libero</div>
+      <div class="pos-desc">Defensive specialist in a distinct jersey. Cannot attack above the net but is the best passer and digger on the team.</div>
+    </div>
+    <div class="pos-card fade-in" onclick="sendInfo('defensive-specialist')">
+      <div class="pos-icon">🎯</div>
+      <div class="pos-name">Defensive Specialist</div>
+      <div class="pos-desc">Serves, passes, and digs from the back row. Substituted for weak-serving players in critical rotations.</div>
+    </div>
+  </div>
+</section>
+
+<!-- RULES -->
+<section id="rules">
+  <div class="section-header fade-in">
+    <div class="section-label">📋 OFFICIAL RULES</div>
+    <h2 class="section-title">Rules of the <em>Game</em></h2>
+    <p class="section-sub">From the official FIVB rulebook — learn the laws that govern the sport.</p>
+  </div>
+  <div class="rules-wrap fade-in">
+    <div class="rule-accordion">
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          Scoring System <span class="chevron">▾</span>
+        </button>
+        <div class="accordion-body">
+          Matches are played best of 5 sets. Sets 1–4 are played to 25 points with a minimum 2-point lead. The deciding 5th set is played to 15 points. A point is scored on every rally. The team that wins the rally scores a point and serves next.
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          Serving Rules <span class="chevron">▾</span>
+        </button>
+        <div class="accordion-body">
+          The server must serve from behind the end line within 8 seconds of the referee's whistle. The ball must clear the net and land in the opponent's court. Foot faults, serving outside the sideline, or hitting the net are faults.
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          Ball in Play <span class="chevron">▾</span>
+        </button>
+        <div class="accordion-body">
+          Each team is allowed a maximum of 3 contacts to return the ball over the net. A player may not hit the ball twice consecutively except on a block attempt. The ball may touch the net during play as long as it crosses completely into the opponent's court.
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          Rotations &amp; Substitutions <span class="chevron">▾</span>
+        </button>
+        <div class="accordion-body">
+          When a team wins a rally after the opponent served, all 6 players rotate one position clockwise. Each team may make up to 6 regular substitutions per set. The libero can replace any back-row player without counting toward substitution limits.
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          Faults &amp; Violations <span class="chevron">▾</span>
+        </button>
+        <div class="accordion-body">
+          Common violations include: touching the net, stepping over the center line under the net, back-row players attacking from in front of the attack line, and double contacts (except on the first team touch). All faults result in a point for the opposing team.
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          Libero Rules <span class="chevron">▾</span>
+        </button>
+        <div class="accordion-body">
+          The libero wears a contrasting uniform and cannot serve, block, or complete an attack hit from above the top of the net. They can only be replaced by the player they substituted. Libero replacements do not count as regular substitutions.
+        </div>
+      </div>
+    </div>
+    <!-- Court Diagram -->
+    <div class="court-diagram">
+      <h3>Volleyball Court Layout</h3>
+      <svg class="court-svg" viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg">
+        <!-- Court background -->
+        <rect x="20" y="20" width="260" height="380" fill="#1a2650" rx="4"/>
+        <!-- Court lines -->
+        <rect x="20" y="20" width="260" height="380" fill="none" stroke="#f0c040" stroke-width="2.5"/>
+        <!-- Net line -->
+        <line x1="20" y1="210" x2="280" y2="210" stroke="#f0c040" stroke-width="3"/>
+        <text x="150" y="207" fill="#f0c040" font-size="9" text-anchor="middle" font-family="Bebas Neue, sans-serif" letter-spacing="1">NET</text>
+        <!-- Attack lines -->
+        <line x1="20" y1="136" x2="280" y2="136" stroke="rgba(240,192,64,0.5)" stroke-width="1.5" stroke-dasharray="8,4"/>
+        <line x1="20" y1="284" x2="280" y2="284" stroke="rgba(240,192,64,0.5)" stroke-width="1.5" stroke-dasharray="8,4"/>
+        <!-- Center divider -->
+        <line x1="150" y1="20" x2="150" y2="400" stroke="rgba(240,192,64,0.2)" stroke-width="1"/>
+        <!-- Player positions - Team A (top) -->
+        <circle cx="80" cy="75" r="16" fill="#f0c040" opacity="0.9"/>
+        <text x="80" y="79" fill="#0a0f2e" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P4</text>
+        <circle cx="150" cy="75" r="16" fill="#f0c040" opacity="0.9"/>
+        <text x="150" y="79" fill="#0a0f2e" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P3</text>
+        <circle cx="220" cy="75" r="16" fill="#f0c040" opacity="0.9"/>
+        <text x="220" y="79" fill="#0a0f2e" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P2</text>
+        <circle cx="80" cy="170" r="16" fill="#e0b030" opacity="0.7"/>
+        <text x="80" y="174" fill="#0a0f2e" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P5</text>
+        <circle cx="150" cy="170" r="16" fill="#e0b030" opacity="0.7"/>
+        <text x="150" y="174" fill="#0a0f2e" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P6</text>
+        <circle cx="220" cy="170" r="16" fill="#e0b030" opacity="0.7"/>
+        <text x="220" y="174" fill="#0a0f2e" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P1</text>
+        <!-- Player positions - Team B (bottom) -->
+        <circle cx="80" cy="345" r="16" fill="#4090e0" opacity="0.9"/>
+        <text x="80" y="349" fill="#fff" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P4</text>
+        <circle cx="150" cy="345" r="16" fill="#4090e0" opacity="0.9"/>
+        <text x="150" y="349" fill="#fff" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P3</text>
+        <circle cx="220" cy="345" r="16" fill="#4090e0" opacity="0.9"/>
+        <text x="220" y="349" fill="#fff" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P2</text>
+        <circle cx="80" cy="250" r="16" fill="#3070c0" opacity="0.7"/>
+        <text x="80" y="254" fill="#fff" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P5</text>
+        <circle cx="150" cy="250" r="16" fill="#3070c0" opacity="0.7"/>
+        <text x="150" y="254" fill="#fff" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P6</text>
+        <circle cx="220" cy="250" r="16" fill="#3070c0" opacity="0.7"/>
+        <text x="220" y="254" fill="#fff" font-size="9" text-anchor="middle" font-weight="700" font-family="DM Sans">P1</text>
+        <!-- Labels -->
+        <text x="150" y="405" fill="rgba(240,192,64,0.6)" font-size="8" text-anchor="middle" font-family="DM Sans" letter-spacing="1">9m × 18m OFFICIAL COURT</text>
+        <text x="30" y="140" fill="rgba(240,192,64,0.6)" font-size="7" font-family="DM Sans">3m</text>
+        <text x="30" y="288" fill="rgba(240,192,64,0.6)" font-size="7" font-family="DM Sans">3m</text>
+      </svg>
+      <p style="font-size:0.78rem;color:var(--gray);text-align:center;">Yellow = Team A &nbsp;|&nbsp; Blue = Team B &nbsp;|&nbsp; Dashed = Attack Line (3m)</p>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY TIMELINE -->
+<section id="history">
+  <div class="section-header fade-in" style="max-width:900px;margin:0 auto 0;">
+    <div class="section-label">📅 TIMELINE</div>
+    <h2 class="section-title">History of <em>Volleyball</em></h2>
+    <p class="section-sub">From a YMCA gym in Massachusetts to the global Olympic stage — the incredible journey of volleyball.</p>
+  </div>
+  <div class="timeline">
+    <div class="tl-item fade-in"><div class="tl-year">1895</div><div class="tl-dot"></div><div class="tl-content"><h4>Mintonette is Born</h4><p>William G. Morgan invents volleyball at the Holyoke YMCA in Massachusetts as a less-intense alternative to basketball.</p></div></div>
+    <div class="tl-item fade-in"><div class="tl-year">1900</div><div class="tl-dot"></div><div class="tl-content"><h4>Special Ball Created</h4><p>A specially designed volleyball is created by A.G. Spalding & Bros., replacing the basketball bladder originally used.</p></div></div>
+    <div class="tl-item fade-in"><div class="tl-year">1916</div><div class="tl-dot"></div><div class="tl-content"><h4>The Set &amp; Spike</h4><p>The Philippines introduce the "set and spike" offensive strategy, transforming volleyball into a faster, more exciting game.</p></div></div>
+    <div class="tl-item fade-in"><div class="tl-year">1947</div><div class="tl-dot"></div><div class="tl-content"><h4>FIVB Founded</h4><p>The Fédération Internationale de Volleyball (FIVB) is established in Paris, France, providing international governance.</p></div></div>
+    <div class="tl-item fade-in"><div class="tl-year">1964</div><div class="tl-dot"></div><div class="tl-content"><h4>Olympic Debut</h4><p>Volleyball makes its Olympic debut at the Tokyo Games, with the Soviet Union winning both men's and women's gold.</p></div></div>
+    <div class="tl-item fade-in"><div class="tl-year">1996</div><div class="tl-dot"></div><div class="tl-content"><h4>Beach Volleyball Goes Olympic</h4><p>Beach volleyball is introduced at the Atlanta Olympics, with Brazil winning the inaugural women's and men's gold medals.</p></div></div>
+    <div class="tl-item fade-in"><div class="tl-year">1998</div><div class="tl-dot"></div><div class="tl-content"><h4>Libero Position Added</h4><p>FIVB introduces the libero defensive specialist, revolutionizing the back-row game and adding a new tactical dimension.</p></div></div>
+    <div class="tl-item fade-in"><div class="tl-year">1999</div><div class="tl-dot"></div><div class="tl-content"><h4>Rally Scoring Adopted</h4><p>The traditional side-out scoring system is replaced by rally scoring to 25 points, making every point matter more.</p></div></div>
+    <div class="tl-item fade-in"><div class="tl-year">2024</div><div class="tl-dot"></div><div class="tl-content"><h4>Paris Olympics</h4><p>Italy wins the women's volleyball gold medal at the Paris Games, and France wins gold in men's beach volleyball on home soil.</p></div></div>
+  </div>
+</section>
+
+<!-- GLOSSARY -->
+<section id="glossary">
+  <div class="section-header fade-in" style="text-align:center;">
+    <div class="section-label">📖 TERMINOLOGY</div>
+    <h2 class="section-title">Volleyball <em>Glossary</em></h2>
+    <p class="section-sub" style="margin:0 auto;">Every term you need to know, from A to Z.</p>
+  </div>
+  <div class="glossary-search-wrap fade-in">
+    <input class="glossary-search" type="text" id="gloss-search" placeholder="Search terms... (e.g. libero, spike, dig)" oninput="filterGlossary()">
+  </div>
+  <div class="glossary-letters fade-in" id="letter-btns"></div>
+  <div class="glossary-grid" id="glossary-grid"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="section-header fade-in" style="max-width:700px;margin:0 auto 0;text-align:center;">
+    <div class="section-label">🧠 TEST YOURSELF</div>
+    <h2 class="section-title">Volleyball <em>Quiz</em></h2>
+    <p class="section-sub" style="margin:0 auto;">How well do you know the sport? Answer 10 questions and find out!</p>
+  </div>
+  <div class="quiz-wrap fade-in">
+    <div class="quiz-progress-bar">
+      <div class="quiz-progress-fill" id="quiz-progress" style="width:0%"></div>
+    </div>
+    <div id="quiz-container">
+      <div class="quiz-q-num" id="quiz-q-num">QUESTION 1 OF 10</div>
+      <div class="quiz-question" id="quiz-question"></div>
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-feedback" id="quiz-feedback"></div>
+      <button class="quiz-next" id="quiz-next" onclick="nextQuestion()">Next Question →</button>
+    </div>
+    <div class="quiz-result" id="quiz-result">
+      <div class="score-big" id="quiz-score"></div>
+      <p style="color:var(--gray);margin:0.5rem 0 1.5rem;">out of 10 correct</p>
+      <div id="quiz-message" style="color:var(--gold);font-size:1.1rem;font-weight:500;margin-bottom:1.5rem;"></div>
+      <button class="btn-primary" onclick="restartQuiz()">Play Again</button>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header fade-in" style="max-width:1200px;margin:0 auto 0;">
+    <div class="section-label">ℹ️ WHO WE ARE</div>
+  </div>
+  <div class="about-wrap fade-in">
+    <div class="about-img">
+      <img src="https://images.unsplash.com/photo-1592656094267-764a45160876?w=600&q=80" alt="Volleyball team" onerror="this.src='https://images.unsplash.com/photo-1547347298-4074fc3086f0?w=600&q=80'">
+      <div class="about-img-badge">
+        <span class="num">10+</span>
+        <span class="txt">YEARS OF<br>PASSION</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <h2>About <span>VolleyPedia</span></h2>
+      <p>VolleyPedia is a passion project built by volleyball players, coaches, and enthusiasts who believe the sport deserves a world-class digital home. We've compiled decades of knowledge into one accessible, beautifully designed encyclopedia.</p>
+      <p>Whether you're a parent watching your child's first match, a competitive club player, or a seasoned coach, VolleyPedia is designed to meet you where you are and take your understanding further.</p>
+      <p>Our content is reviewed by certified FIVB coaches and cross-referenced with the official FIVB rulebook, ensuring accuracy you can trust.</p>
+      <div class="about-team">
+        <h3>Meet the Team</h3>
+        <div class="team-grid">
+          <div class="team-member">
+            <div class="team-avatar">MA</div>
+            <div>
+              <div class="team-name">Miguel Andres</div>
+              <div class="team-role">Founder &amp; Head Editor</div>
+            </div>
+          </div>
+          <div class="team-member">
+            <div class="team-avatar">SL</div>
+            <div>
+              <div class="team-name">Sofia Lim</div>
+              <div class="team-role">Head Coach Advisor</div>
+            </div>
+          </div>
+          <div class="team-member">
+            <div class="team-avatar">JR</div>
+            <div>
+              <div class="team-name">James Reyes</div>
+              <div class="team-role">Content Writer</div>
+            </div>
+          </div>
+          <div class="team-member">
+            <div class="team-avatar">KP</div>
+            <div>
+              <div class="team-name">Kira Patel</div>
+              <div class="team-role">UX &amp; Web Design</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header fade-in">
+    <div class="section-label">📬 GET IN TOUCH</div>
+    <h2 class="section-title">Contact <em>Us</em></h2>
+    <p class="section-sub">Have a correction, question, or just want to talk volleyball? We'd love to hear from you.</p>
+  </div>
+  <div class="contact-wrap fade-in">
+    <div class="contact-info">
+      <div class="contact-info-item">
+        <div class="ci-icon">📧</div>
+        <div>
+          <div class="ci-label">EMAIL</div>
+          <div class="ci-value">hello@volleypedia.com</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ci-icon">🌐</div>
+        <div>
+          <div class="ci-label">BASED IN</div>
+          <div class="ci-value">Manila, Philippines 🇵🇭</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ci-icon">📱</div>
+        <div>
+          <div class="ci-label">SOCIAL MEDIA</div>
+          <div class="ci-value">@VolleyPedia on all platforms</div>
+        </div>
+      </div>
+      <div class="contact-info-item">
+        <div class="ci-icon">🕐</div>
+        <div>
+          <div class="ci-label">RESPONSE TIME</div>
+          <div class="ci-value">Usually within 24–48 hours</div>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form" onsubmit="submitForm(event)">
+      <div class="form-row">
+        <div class="form-field">
+          <label>FIRST NAME</label>
+          <input type="text" placeholder="Your first name" required>
+        </div>
+        <div class="form-field">
+          <label>LAST NAME</label>
+          <input type="text" placeholder="Your last name" required>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>EMAIL</label>
+        <input type="email" placeholder="you@example.com" required>
+      </div>
+      <div class="form-field">
+        <label>TOPIC</label>
+        <select>
+          <option value="">Select a topic...</option>
+          <option>Content Correction</option>
+          <option>Suggest a Topic</option>
+          <option>Partnership / Collaboration</option>
+          <option>General Question</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>MESSAGE</label>
+        <textarea placeholder="Tell us what's on your mind..."></textarea>
+      </div>
+      <button type="submit" class="btn-primary" style="align-self:flex-start;">Send Message →</button>
+      <div class="form-msg" id="form-msg">✓ Message sent! We'll get back to you within 48 hours.</div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="logo">VolleyPedia</span>
+      <p>Your ultimate digital encyclopedia for everything volleyball — rules, history, tactics, and more. Built with love for the sport.</p>
+    </div>
+    <div class="footer-col">
+      <h4>EXPLORE</h4>
+      <ul>
+        <li><a href="#positions">Positions</a></li>
+        <li><a href="#rules">Rules</a></li>
+        <li><a href="#history">History</a></li>
+        <li><a href="#glossary">Glossary</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>LEARN</h4>
+      <ul>
+        <li><a href="#video-section">Video Library</a></li>
+        <li><a href="#quiz">Take the Quiz</a></li>
+        <li><a href="#rules">Official Rules</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>ABOUT</h4>
+      <ul>
+        <li><a href="#about">Our Team</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+        <li><a href="#about">Our Mission</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 VolleyPedia. Made with 🏐 in Manila, Philippines.</span>
+    <span>All content for educational purposes only.</span>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ===== NAV MOBILE =====
+function toggleMenu() {
+  const menu = document.getElementById('mobile-menu');
+  menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+}
+
+// ===== SCROLL TOP =====
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scroll-top');
+  btn.classList.toggle('visible', window.scrollY > 400);
+});
+
+// ===== FADE IN ON SCROLL =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ===== VIDEO =====
+function changeVideo(id, el) {
+  const iframe = document.querySelector('.video-main iframe');
+  iframe.src = `https://www.youtube.com/embed/${id}`;
+  document.querySelectorAll('.video-thumb').forEach(t => t.style.borderColor = '');
+  el.style.borderColor = 'var(--gold)';
+}
+
+// ===== ACCORDION =====
+function toggleAccordion(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.accordion-btn').forEach(b => b.classList.remove('open'));
+  if (!isOpen) { body.classList.add('open'); btn.classList.add('open'); }
+}
+
+// ===== GLOSSARY DATA =====
+const glossaryData = [
+  { term: "Ace", def: "A serve that lands untouched in the opponent's court, immediately winning the point." },
+  { term: "Attack Line", def: "The line 3 meters from the net that restricts back-row players from attacking above net height in front of it." },
+  { term: "Block", def: "A defensive play at the net where one or more players jump and extend their arms to stop an opponent's attack." },
+  { term: "Cover", def: "When teammates position around an attacker to receive a blocked ball and keep it in play." },
+  { term: "Dig", def: "A defensive pass, typically from a low position, used to receive a hard-driven spike or serve." },
+  { term: "Dump", def: "A surprise attack by the setter, who tips the ball over the net on the second touch instead of setting." },
+  { term: "Float Serve", def: "A serve hit without spin that creates an unpredictable, knuckleball-like trajectory." },
+  { term: "Free Ball", def: "When a team sends the ball over the net with a pass rather than a spike, giving the defense an easy dig." },
+  { term: "Game Point", def: "A point that, if won, will end the current set." },
+  { term: "Hitting Percentage", def: "A statistic calculated as (kills minus errors) divided by total attempts, measuring attacker efficiency." },
+  { term: "In-System", def: "A rally where the pass is good and the setter can run any offensive option with ease." },
+  { term: "Jump Serve", def: "A powerful serve where the player tosses the ball high, takes an approach, and attacks it like a spike from behind the line." },
+  { term: "Kill", def: "An attack that directly results in a point, either by landing in the court or forcing an error by the defense." },
+  { term: "Libero", def: "A specialized back-row defensive player wearing a different-colored jersey who cannot attack or block above the net." },
+  { term: "Match Point", def: "A point that, if won, will win the entire match for the serving team." },
+  { term: "Net Violation", def: "A fault called when a player contacts the net during play, awarding the point to the opposing team." },
+  { term: "Overpass", def: "When a team accidentally sends the ball over the net on their first or second contact instead of setting up an attack." },
+  { term: "Pancake", def: "An emergency defensive technique where a player slides a flat hand on the floor to prevent the ball from touching the ground." },
+  { term: "Quick Set", def: "A very low, fast set delivered directly above the setter to a middle blocker for a speed attack." },
+  { term: "Rally", def: "The period of play from the serve until the ball is dead, resulting in a point for one team." },
+  { term: "Rotation", def: "The clockwise movement of all six players when their team wins a rally after receiving the opponent's serve." },
+  { term: "Seam", def: "The gap between two blockers at the net, which attackers target to find a path through the block." },
+  { term: "Setter", def: "The player who delivers the second contact to position the ball for an attacker — the team's offensive organizer." },
+  { term: "Side Out", def: "When the receiving team wins the rally and gains the right to serve." },
+  { term: "Spike", def: "A powerful overhead attack where a player jumps and hits the ball sharply downward into the opponent's court." },
+  { term: "Tip", def: "A soft, off-speed attack where the player redirects the ball with their fingertips instead of hitting it hard." },
+  { term: "Tool", def: "Hitting the ball off the blockers' hands and out of bounds, intentionally using the block to score." },
+  { term: "Underhand Serve", def: "The most basic serve, where the ball is held and hit with an underarm swing — common for beginners." },
+  { term: "Volleyball", def: "An Olympic team sport played by two teams of 6 on a court divided by a net, with the goal of landing the ball on the opponent's floor." },
+  { term: "Zone Defense", def: "A defensive system where each player is responsible for defending a specific area of the court rather than a specific opponent." },
+];
+
+// ===== GLOSSARY RENDER =====
+function renderGlossary(items) {
+  const grid = document.getElementById('glossary-grid');
+  if (!items.length) {
+    grid.innerHTML = '<p class="no-results">No terms found. Try a different search!</p>';
+    return;
+  }
+  grid.innerHTML = items.map(i => `
+    <div class="gloss-card">
+      <div class="gloss-term">${i.term}</div>
+      <div class="gloss-def">${i.def}</div>
+    </div>
+  `).join('');
+}
+
+function filterGlossary() {
+  const q = document.getElementById('gloss-search').value.toLowerCase();
+  document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('active'));
+  const filtered = glossaryData.filter(i => i.term.toLowerCase().includes(q) || i.def.toLowerCase().includes(q));
+  renderGlossary(filtered);
+}
+
+// Build letter buttons
+const letters = [...new Set(glossaryData.map(i => i.term[0].toUpperCase()))].sort();
+const lbContainer = document.getElementById('letter-btns');
+['All', ...letters].forEach(l => {
+  const btn = document.createElement('button');
+  btn.className = 'letter-btn' + (l === 'All' ? ' active' : '');
+  btn.textContent = l;
+  btn.onclick = () => {
+    document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('gloss-search').value = '';
+    if (l === 'All') renderGlossary(glossaryData);
+    else renderGlossary(glossaryData.filter(i => i.term[0].toUpperCase() === l));
+  };
+  lbContainer.appendChild(btn);
+});
+renderGlossary(glossaryData);
+
+// ===== QUIZ =====
+const questions = [
+  { q: "How many players are on each side of the net in a standard volleyball match?", opts: ["4", "5", "6", "7"], a: 2 },
+  { q: "To what score is a standard volleyball set played?", opts: ["21", "25", "30", "15"], a: 1 },
+  { q: "Which player wears a different-colored jersey and cannot attack above the net?", opts: ["Setter", "Opposite", "Libero", "Defensive Specialist"], a: 2 },
+  { q: "In which year was volleyball invented?", opts: ["1891", "1895", "1900", "1910"], a: 1 },
+  { q: "In which year did volleyball debut at the Olympic Games?", opts: ["1956", "1960", "1964", "1968"], a: 2 },
+  { q: "How many touches is each team allowed per side before returning the ball?", opts: ["2", "3", "4", "Unlimited"], a: 1 },
+  { q: "What is an 'ace' in volleyball?", opts: ["A block that results in a point", "A serve that wins the point without being touched", "A spike down the line", "A perfect set"], a: 1 },
+  { q: "The attack line is how many meters from the net?", opts: ["2 meters", "3 meters", "4 meters", "5 meters"], a: 1 },
+  { q: "Who invented volleyball?", opts: ["James Naismith", "William G. Morgan", "Pierre de Coubertin", "Walter Camp"], a: 1 },
+  { q: "What was volleyball originally called when it was invented?", opts: ["Fistball", "Netball", "Mintonette", "Blastball"], a: 2 },
+];
+
+let currentQ = 0, score = 0, answered = false;
+
+function loadQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('quiz-q-num').textContent = `QUESTION ${currentQ + 1} OF ${questions.length}`;
+  document.getElementById('quiz-question').textContent = q.q;
+  document.getElementById('quiz-progress').style.width = `${(currentQ / questions.length) * 100}%`;
+  const opts = document.getElementById('quiz-options');
+  opts.innerHTML = q.opts.map((o, i) => `<button class="quiz-opt" onclick="answer(${i})">${o}</button>`).join('');
+  document.getElementById('quiz-feedback').className = 'quiz-feedback';
+  document.getElementById('quiz-feedback').textContent = '';
+  document.getElementById('quiz-next').className = 'quiz-next';
+  answered = false;
+}
+
+function answer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = questions[currentQ];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.disabled = true);
+  const feedback = document.getElementById('quiz-feedback');
+  if (idx === q.a) {
+    score++;
+    opts[idx].classList.add('correct');
+    feedback.textContent = '✓ Correct! Well done!';
+    feedback.className = 'quiz-feedback show correct';
+  } else {
+    opts[idx].classList.add('wrong');
+    opts[q.a].classList.add('correct');
+    feedback.textContent = `✗ Not quite. The correct answer is: ${q.opts[q.a]}`;
+    feedback.className = 'quiz-feedback show wrong';
+  }
+  const nextBtn = document.getElementById('quiz-next');
+  nextBtn.textContent = currentQ < questions.length - 1 ? 'Next Question →' : 'See Results →';
+  nextBtn.className = 'quiz-next show';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) showResult();
+  else loadQuestion();
+}
+
+function showResult() {
+  document.getElementById('quiz-container').style.display = 'none';
+  const result = document.getElementById('quiz-result');
+  result.className = 'quiz-result show';
+  document.getElementById('quiz-score').textContent = score;
+  document.getElementById('quiz-progress').style.width = '100%';
+  const msg = score >= 9 ? '🏆 Volleyball Encyclopedia!' : score >= 7 ? '🥇 Excellent work!' : score >= 5 ? '👍 Solid performance!' : '📚 Keep studying!';
+  document.getElementById('quiz-message').textContent = msg;
+}
+
+function restartQuiz() {
+  currentQ = 0; score = 0;
+  document.getElementById('quiz-container').style.display = 'block';
+  document.getElementById('quiz-result').className = 'quiz-result';
+  loadQuestion();
+}
+
+loadQuestion();
+
+// ===== CONTACT FORM =====
+function submitForm(e) {
+  e.preventDefault();
+  document.getElementById('form-msg').className = 'form-msg success';
+  e.target.reset();
+  setTimeout(() => { document.getElementById('form-msg').className = 'form-msg'; }, 5000);
+}
+
+// ===== POSITION INFO =====
+function sendInfo(pos) {
+  const labels = {
+    'setter': 'Setter', 'outside-hitter': 'Outside Hitter',
+    'opposite': 'Opposite Hitter', 'middle-blocker': 'Middle Blocker',
+    'libero': 'Libero', 'defensive-specialist': 'Defensive Specialist'
+  };
+  alert(`📖 ${labels[pos]}\n\nScroll down to the Glossary section to search for more terms, or take the Quiz to test your knowledge!`);
+}
+</script>
+</body>
+</html>
